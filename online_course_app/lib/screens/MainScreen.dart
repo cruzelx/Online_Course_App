@@ -158,14 +158,14 @@ class _MainScreenState extends State<MainScreen> {
                                             BorderRadius.circular(20.0)),
                                     child: Container(
                                         width: 200,
-                                        height: 245.0,
+                                        height: 260.0,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(20.0)),
                                         child: Column(
                                           children: <Widget>[
                                             Container(
-                                              height: 122.5,
+                                              height: 125,
                                               width: double.infinity,
                                               child: ClipRRect(
                                                   borderRadius:
@@ -190,6 +190,7 @@ class _MainScreenState extends State<MainScreen> {
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: <Widget>[
                                                   Text(
                                                     "Begineer: Introduction To Neural Network",
@@ -200,7 +201,7 @@ class _MainScreenState extends State<MainScreen> {
                                                         TextOverflow.ellipsis,
                                                     maxLines: 2,
                                                   ),
-                                                  SizedBox(height: 8.0),
+                                                  // SizedBox(height: 5.0),
                                                   Row(
                                                     children: <Widget>[
                                                       Icon(Icons.blur_on),

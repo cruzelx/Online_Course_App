@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_app/screens/CategoryScreens.dart';
 import 'package:online_course_app/screens/CourseScreen.dart';
 import 'package:online_course_app/screens/MainScreen.dart';
 
@@ -23,6 +24,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // return CourseScreen();
-    return MainScreen();
+    return CategoryScreen();
   }
 }
