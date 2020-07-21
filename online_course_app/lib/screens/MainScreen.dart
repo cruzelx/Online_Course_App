@@ -105,7 +105,9 @@ class _MainScreenState extends State<MainScreen> {
                       // physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              // Navigator.of(context).push()
+                            },
                             child: Container(
                               child: Row(
                                 children: <Widget>[

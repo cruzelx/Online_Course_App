@@ -4,6 +4,7 @@ import 'package:online_course_app/screens/CourseScreen.dart';
 import 'package:online_course_app/screens/MainScreen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(OnlineCourseApp());
 }
 
@@ -23,7 +24,7 @@ class OnlineCourseApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // return CourseScreen();
-    return CategoryScreen();
+    return CourseScreen();
+    // return CategoryScreen();
   }
 }
