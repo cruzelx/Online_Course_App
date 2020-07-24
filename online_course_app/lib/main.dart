@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_app/bloc/loginViewModel.dart';
 import 'package:online_course_app/constants/enums/connectivityStatus.dart';
 import 'package:online_course_app/locator.dart';
+import 'package:online_course_app/routes/routes.dart';
 import 'package:online_course_app/screens/CategoryScreens.dart';
 import 'package:online_course_app/screens/CourseScreen.dart';
 import 'package:online_course_app/screens/CreateCategoryScreen.dart';
@@ -23,7 +25,8 @@ class OnlineCourseApp extends StatelessWidget {
       providers: [
         StreamProvider<ConnectivityStatus>(
             create: (context) =>
-                ConnectivityService().connectionStatusController.stream)
+                ConnectivityService().connectionStatusController.stream),
+        ChangeNotifierProvider(create: (context) => LoginViewModel()),
       ],
       child: MaterialApp(
         title: "Online Course App",
@@ -32,6 +35,7 @@ class OnlineCourseApp extends StatelessWidget {
         darkTheme: ThemeData.dark(),
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
+        onGenerateRoute: Router.generateRoute,
       ),
     );
   }
