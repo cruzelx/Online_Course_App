@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_app/components/drawer.dart';
 import 'package:online_course_app/components/youtubeVideoPlayer.dart';
+import 'package:online_course_app/screens/QuizScreen.dart';
+import 'package:online_course_app/screens/QuizeResultScreen.dart';
 
 class CourseScreen extends StatefulWidget {
   @override
@@ -60,7 +62,10 @@ class _CourseScreenState extends State<CourseScreen>
             YoutubeVideoPlayer(),
             SizedBox(height: 20.0),
             RaisedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => QuizeScreen()));
+              },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               color: Colors.green,

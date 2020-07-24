@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_app/components/popularCourseCard.dart';
+import 'package:online_course_app/screens/CategoryScreens.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -60,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: CircleAvatar(
                   radius: 30.0,
                   backgroundImage: NetworkImage(
-                      "https://scontent.fktm7-1.fna.fbcdn.net/v/t1.0-9/s960x960/61895741_1030831727110119_8215917200502947840_o.jpg?_nc_cat=102&_nc_sid=85a577&_nc_ohc=7IBS5n55dRMAX_hsWJv&_nc_ht=scontent.fktm7-1.fna&_nc_tp=7&oh=ec6c600fef683cef5c3f03fa6684426b&oe=5F1AC22B"),
+                      "https://pbs.twimg.com/profile_images/1222654825403424768/-ySQePLc.jpg"),
                 ),
               ),
             )
@@ -72,6 +74,7 @@ class _MainScreenState extends State<MainScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: 25.0),
@@ -95,7 +98,8 @@ class _MainScreenState extends State<MainScreen> {
                               borderSide: BorderSide.none))),
                 ),
                 SizedBox(height: 25.0),
-                Text("Categories"),
+                Text("Categories",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(height: 10.0),
                 Container(
                   height: 130.0,
@@ -106,7 +110,7 @@ class _MainScreenState extends State<MainScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                             onTap: () {
-                              // Navigator.of(context).push()
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoryScreen()));
                             },
                             child: Container(
                               child: Row(
@@ -143,155 +147,110 @@ class _MainScreenState extends State<MainScreen> {
                         TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
                 SizedBox(height: 10.0),
                 Container(
-                  height: 250.0,
-                  child: ListView.builder(
+                  height: 280.0,
+                  child: ListView.separated(
+                      itemCount: 10,
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       // physics: NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) {
+                        return SizedBox(width: 20.0);
+                      },
                       itemBuilder: (context, index) {
-                        return GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0)),
-                                    child: Container(
-                                        width: 200,
-                                        height: 260.0,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0)),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Container(
-                                              height: 125,
-                                              width: double.infinity,
-                                              child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  20.0),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  20.0)),
-                                                  child: Image.network(
-                                                      "https://media3.s-nbcnews.com/i/newscms/2019_41/3044956/191009-cooking-vegetables-al-1422_ae181a762406ae9dce02dd0d5453d1ba.jpg",
-                                                      fit: BoxFit.cover)),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.blue,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0)),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: <Widget>[
-                                                  Text(
-                                                    "Begineer: Introduction To Neural Network",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 2,
-                                                  ),
-                                                  // SizedBox(height: 5.0),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Icon(Icons.blur_on),
-                                                      SizedBox(width: 8.0),
-                                                      Text("12 videos"),
-                                                    ],
-                                                  ),
-                                                  Divider(),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Icon(Icons
-                                                          .play_circle_outline),
-                                                      SizedBox(width: 8.0),
-                                                      Text(
-                                                        "Start The Course",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      )
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                  SizedBox(width: 15.0)
-                                ],
-                              ),
-                            ));
+                        return PopularCourseCard();
+                        // GestureDetector(
+                        //     onTap: () {},
+                        //     child: Container(
+                        //       child: Row(
+                        //         children: <Widget>[
+                        //           Card(
+                        //             shape: RoundedRectangleBorder(
+                        //                 borderRadius:
+                        //                     BorderRadius.circular(20.0)),
+                        //             child: Container(
+                        //                 width: 200,
+                        //                 height: 260.0,
+                        //                 decoration: BoxDecoration(
+                        //                     borderRadius:
+                        //                         BorderRadius.circular(20.0)),
+                        //                 child: Column(
+                        //                   children: <Widget>[
+                        //                     Container(
+                        //                       height: 125,
+                        //                       width: double.infinity,
+                        //                       child: ClipRRect(
+                        //                           borderRadius:
+                        //                               BorderRadius.only(
+                        //                                   topLeft:
+                        //                                       Radius.circular(
+                        //                                           20.0),
+                        //                                   topRight:
+                        //                                       Radius.circular(
+                        //                                           20.0)),
+                        //                           child: Image.network(
+                        //                               "https://static.sustainability.asu.edu/giosMS-uploads/sites/15/2019/05/teaching-resources-1024x575.jpg",
+                        //                               fit: BoxFit.cover)),
+                        //                       decoration: BoxDecoration(
+                        //                           color: Colors.blue,
+                        //                           borderRadius:
+                        //                               BorderRadius.circular(
+                        //                                   20.0)),
+                        //                     ),
+                        //                     Padding(
+                        //                       padding: EdgeInsets.all(8.0),
+                        //                       child: Column(
+                        //                         crossAxisAlignment:
+                        //                             CrossAxisAlignment.start,
+                        //                         mainAxisAlignment:
+                        //                             MainAxisAlignment
+                        //                                 .spaceBetween,
+                        //                         children: <Widget>[
+                        //                           Text(
+                        //                             "Begineer: Introduction To Neural Network",
+                        //                             style: TextStyle(
+                        //                                 fontWeight:
+                        //                                     FontWeight.bold),
+                        //                             overflow:
+                        //                                 TextOverflow.ellipsis,
+                        //                             maxLines: 2,
+                        //                           ),
+                        //                           // SizedBox(height: 5.0),
+                        //                           Row(
+                        //                             children: <Widget>[
+                        //                               Icon(Icons.blur_on),
+                        //                               SizedBox(width: 8.0),
+                        //                               Text("12 videos"),
+                        //                             ],
+                        //                           ),
+
+                        //                           Divider(),
+                        //                           Row(
+                        //                             children: <Widget>[
+                        //                               Icon(Icons
+                        //                                   .play_circle_outline),
+                        //                               SizedBox(width: 8.0),
+                        //                               Text(
+                        //                                 "Start The Course",
+                        //                                 style: TextStyle(
+                        //                                     fontWeight:
+                        //                                         FontWeight
+                        //                                             .bold),
+                        //                               )
+                        //                             ],
+                        //                           )
+                        //                         ],
+                        //                       ),
+                        //                     ),
+                        //                   ],
+                        //                 )),
+                        //           ),
+                        //           SizedBox(width: 15.0)
+                        //         ],
+                        //       ),
+                        //     ));
                       }),
                 ),
-                SizedBox(height: 20.0),
-                Text("Hot Topics"),
-                SizedBox(height: 10.0),
-                Container(
-                  height: 250.0,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      // physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {},
-                          child: Column(
-                            children: <Widget>[
-                              ListTile(
-                                  subtitle: Text(". 2 vids"),
-                                  leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        "https://scontent.fktm7-1.fna.fbcdn.net/v/t1.0-9/s960x960/61895741_1030831727110119_8215917200502947840_o.jpg?_nc_cat=102&_nc_sid=85a577&_nc_ohc=7IBS5n55dRMAX_hsWJv&_nc_ht=scontent.fktm7-1.fna&_nc_tp=7&oh=6d689acff846f8f9575a21cf736e8c88&oe=5F16CDAB"),
-                                  ),
-                                  title: Text("Hot Topic $index")),
-                              Divider(indent: 70.0),
-                            ],
-                          ),
-                        );
-                      }),
-                ),
-                SizedBox(height: 20.0),
-                Text("Recent Topics"),
-                SizedBox(height: 10.0),
-                Container(
-                  height: 250.0,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      // physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {},
-                          child: Column(
-                            children: <Widget>[
-                              ListTile(
-                                  subtitle: Text(". 2 vids"),
-                                  leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        "https://scontent.fktm7-1.fna.fbcdn.net/v/t1.0-9/s960x960/61895741_1030831727110119_8215917200502947840_o.jpg?_nc_cat=102&_nc_sid=85a577&_nc_ohc=7IBS5n55dRMAX_hsWJv&_nc_ht=scontent.fktm7-1.fna&_nc_tp=7&oh=6d689acff846f8f9575a21cf736e8c88&oe=5F16CDAB"),
-                                  ),
-                                  title: Text("Recents Topic $index")),
-                              Divider(indent: 70.0),
-                            ],
-                          ),
-                        );
-                      }),
-                ),
+                SizedBox(height: 20.0)
               ],
             ),
           ),

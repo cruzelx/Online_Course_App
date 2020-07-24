@@ -8,7 +8,7 @@ class QuizeScreen extends StatefulWidget {
 }
 
 class _QuizeScreenState extends State<QuizeScreen> {
-  PageController _pageController = PageController();
+  PageController _pageController;
   var currentPageNumber = 0.0;
 
   int totalPages = 5;
@@ -16,6 +16,7 @@ class _QuizeScreenState extends State<QuizeScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    _pageController = PageController();
 
     _pageController.addListener(() {
       setState(() {
@@ -29,7 +30,9 @@ class _QuizeScreenState extends State<QuizeScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    // _pageController.removeListener(() { });
+    _pageController.removeListener(() {
+      setState(() {});
+    });
     _pageController.dispose();
     super.dispose();
   }
