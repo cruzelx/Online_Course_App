@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_app/constants/enums/connectivityStatus.dart';
+import 'package:online_course_app/locator.dart';
 import 'package:online_course_app/screens/CategoryScreens.dart';
 import 'package:online_course_app/screens/CourseScreen.dart';
 import 'package:online_course_app/screens/CreateCategoryScreen.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   runApp(OnlineCourseApp());
 }
 
