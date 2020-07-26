@@ -40,4 +40,10 @@ class CategoryService {
   Future<void> updateCategory(Category category, String id) async {
     await _api.updateDocument(category.toJson(), id);
   }
+
+  Future<Category> createCategory(Category category) async {
+    var newCategoryRef = await _api.addDocument(category.toJson());
+    var newCategory = await newCategoryRef.get();
+    return Category.fromJson(newCategory.data, newCategory.documentID);
+  }
 }

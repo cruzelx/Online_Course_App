@@ -23,7 +23,17 @@ class CategoryViewModel extends BaseModel {
     });
   }
 
-  Future deleteCategory(int index) async {
+  Future<void> deleteCategory(int index) async {
     await _catService.deleteCategory(_categories[index].id);
+    _categories.removeAt(index);
+    notifyListeners();
+  }
+
+  Future<void> updateCategory(Category category, String id) async {
+    await _catService.updateCategory(category, id);
+  }
+
+  Future<Category> createCategory(Category category) async {
+    return await _catService.createCategory(category);
   }
 }
