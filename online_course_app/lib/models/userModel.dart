@@ -12,7 +12,8 @@ class User {
   List<Scores> scores;
 
   User(
-      {this.id,this.username,
+      {this.id,
+      this.username,
       this.email,
       this.dp,
       this.isAdmin,
@@ -23,8 +24,9 @@ class User {
       this.createdQuizes,
       this.scores});
 
-  User.fromJson(Map<String, dynamic> json) {
-    id= json['id'];
+  User.fromJson(Map<String, dynamic> json, String id) {
+    if (json == null) return;
+    id = json['id'];
     username = json['username'];
     email = json['email'];
     dp = json['dp'];
@@ -44,7 +46,7 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id']=this.id;
+    data['id'] = this.id;
     data['username'] = this.username;
     data['email'] = this.email;
     data['dp'] = this.dp;

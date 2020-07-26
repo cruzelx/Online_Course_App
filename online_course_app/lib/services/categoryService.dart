@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:online_course_app/models/categoryModel.dart';
 import 'package:online_course_app/services/firebaseBaseAPIService.dart';
-import 'package:flutter/material.dart';
 
 class CategoryService {
   FirebaseBaseAPIService _api = FirebaseBaseAPIService('categories');
