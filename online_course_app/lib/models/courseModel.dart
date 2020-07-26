@@ -16,7 +16,8 @@ class Course {
       this.category,
       this.createdBy});
 
-  Course.fromJson(Map<String, dynamic> json) {
+  Course.fromJson(Map<String, dynamic> json, String id) {
+    if (json == null) return;
     id = json['id'];
     title = json['title'];
     description = json['description'];

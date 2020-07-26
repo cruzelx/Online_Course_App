@@ -4,9 +4,7 @@ import 'package:online_course_app/models/categoryModel.dart';
 import 'package:online_course_app/services/categoryService.dart';
 
 class CategoryViewModel extends BaseModel {
-  CategoryViewModel() {
-    listenToCategoriesStream();
-  }
+
   CategoryService _catService = locator<CategoryService>();
 
   List<Category> _categories;
