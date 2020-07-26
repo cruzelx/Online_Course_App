@@ -63,6 +63,7 @@ flutter:
     - assets/images/google.svg
     - assets/images/create.svg
     - assets/images/createCourse.svg
+    - assets/images/error.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

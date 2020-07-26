@@ -66,7 +66,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                               textColor: Colors.white,
                               color: Color(0xff1000ff),
                               onPressed: () {},
-                              child: Text("Pick Category Cover Image")),
+                              child: Text("Pick Cover Image")),
                         ),
                         SizedBox(height: 30.0),
                         Container(

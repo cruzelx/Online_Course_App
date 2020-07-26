@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:online_course_app/constants/routesName.dart';
 import 'package:online_course_app/screens/CategoryScreens.dart';
 import 'package:online_course_app/screens/CourseScreen.dart';
+import 'package:online_course_app/screens/CreateCategoryScreen.dart';
+import 'package:online_course_app/screens/CreateCourseScreen.dart';
 import 'package:online_course_app/screens/MainScreen.dart';
 import 'package:online_course_app/screens/LoginScreen.dart';
 import 'package:online_course_app/screens/QuizScreen.dart';
@@ -28,6 +30,12 @@ class Router {
         break;
       case CategoryViewScreen:
         return MaterialPageRoute(builder: (_) => CategoryScreen());
+        break;
+      case CreateCategoryViewScreen:
+        return MaterialPageRoute(builder: (_) => CreateCategoryScreen());
+        break;
+      case CreateCourseViewScreen:
+        return MaterialPageRoute(builder: (_) => CreateCourseScreen());
         break;
       default:
         return MaterialPageRoute(
