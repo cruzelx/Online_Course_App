@@ -25,8 +25,6 @@ class CategoryViewModel extends BaseModel {
 
   Future<void> deleteCategory(int index) async {
     await _catService.deleteCategory(_categories[index].id);
-    _categories.removeAt(index);
-    notifyListeners();
   }
 
   Future<void> updateCategory(Category category, String id) async {
