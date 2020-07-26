@@ -34,4 +34,8 @@ class CategoryViewModel extends BaseModel {
   Future<Category> createCategory(Category category) async {
     return await _catService.createCategory(category);
   }
+
+  Future<Category> fetchCategory(String id) async {
+    return await _catService.fetchCategory(id);
+  }
 }

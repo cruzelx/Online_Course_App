@@ -31,4 +31,8 @@ class UserViewModel extends BaseModel {
   Future<User> createUser(User user) async {
     return await _userService.createUser(user);
   }
+
+  Future<User> fetchUser(String id) async {
+    return await _userService.fetchUser(id);
+  }
 }
