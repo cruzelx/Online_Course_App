@@ -13,6 +13,7 @@ import 'package:online_course_app/screens/QuizScreen.dart';
 import 'package:online_course_app/screens/LoginScreen.dart';
 import 'package:online_course_app/screens/errorScreen.dart';
 import 'package:online_course_app/services/authService.dart';
+import 'package:online_course_app/services/categoryService.dart';
 import 'package:online_course_app/services/connectivityService.dart';
 import 'package:provider/provider.dart';
 
@@ -55,6 +56,7 @@ class HoldUp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+  final CategoryService _categoryService = CategoryService();
   @override
   Widget build(BuildContext context) {
     FirebaseUser _user = Provider.of<FirebaseUser>(context);
