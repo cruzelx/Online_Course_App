@@ -1,10 +1,11 @@
+import 'dart:io';
+
 import 'package:online_course_app/bloc/baseViewModel.dart';
 import 'package:online_course_app/locator.dart';
 import 'package:online_course_app/models/categoryModel.dart';
 import 'package:online_course_app/services/categoryService.dart';
 
 class CategoryViewModel extends BaseModel {
-
   CategoryService _catService = locator<CategoryService>();
 
   List<Category> _categories;
@@ -35,5 +36,9 @@ class CategoryViewModel extends BaseModel {
 
   Future<Category> fetchCategory(String id) async {
     return await _catService.fetchCategory(id);
+  }
+
+  Future uploadImage(File image, String filename) async {
+    return uploadFile(image, filename);
   }
 }

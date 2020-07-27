@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:online_course_app/bloc/baseViewModel.dart';
 import 'package:online_course_app/locator.dart';
 import 'package:online_course_app/models/courseModel.dart';
@@ -35,5 +37,9 @@ class CourseViewModel extends BaseModel {
 
   Future<Course> fetchCourse(String id) async {
     return await _courseService.fetchCourse(id);
+  }
+
+  Future uploadImage(File image, String filename) async {
+    return uploadFile(image, filename);
   }
 }
