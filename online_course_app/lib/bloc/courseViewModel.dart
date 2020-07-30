@@ -39,7 +39,7 @@ class CourseViewModel extends BaseModel {
     return await _courseService.fetchCourse(id);
   }
 
-  Future uploadImage(File image, String filename) async {
-    return uploadFile(image, filename);
+  Future uploadImage(File image) async {
+    return uploadFile(image);
   }
 }

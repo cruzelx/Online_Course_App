@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:online_course_app/bloc/CreateQuizeQuestion.dart';
+import 'package:online_course_app/bloc/categoryViewModel.dart';
+import 'package:online_course_app/bloc/imagePickerViewModel.dart';
 import 'package:online_course_app/bloc/loginViewModel.dart';
+import 'package:online_course_app/bloc/quizeViewModel.dart';
 import 'package:online_course_app/constants/enums/connectivityStatus.dart';
 import 'package:online_course_app/locator.dart';
 import 'package:online_course_app/routes/routes.dart';
-import 'package:online_course_app/screens/CategoryScreens.dart';
-import 'package:online_course_app/screens/CourseScreen.dart';
-import 'package:online_course_app/screens/CreateCategoryScreen.dart';
-import 'package:online_course_app/screens/CreateCourseScreen.dart';
-import 'package:online_course_app/screens/MainScreen.dart';
-import 'package:online_course_app/screens/QuizScreen.dart';
-import 'package:online_course_app/screens/LoginScreen.dart';
-import 'package:online_course_app/screens/errorScreen.dart';
+
+import 'package:online_course_app/screens/categoryScreen/CreateCategoryScreen.dart';
+import 'package:online_course_app/screens/quizeScreen/CreateQuestionScreen.dart';
+import 'package:online_course_app/screens/quizeScreen/CreateQuizeScreen.dart';
 import 'package:online_course_app/services/authService.dart';
 import 'package:online_course_app/services/categoryService.dart';
 import 'package:online_course_app/services/connectivityService.dart';
@@ -34,6 +34,11 @@ class OnlineCourseApp extends StatelessWidget {
         StreamProvider<FirebaseUser>.value(
             value: locator<AuthenticationService>().user),
         ChangeNotifierProvider(create: (context) => LoginViewModel()),
+        ChangeNotifierProvider(create: (context) => ImagePickerViewModel()),
+        ChangeNotifierProvider(create: (context) => CategoryViewModel()),
+        ChangeNotifierProvider(create: (context) => QuizeViewModel()),
+        ChangeNotifierProvider(
+            create: (context) => CreateQuizeQuestionViewModel()),
       ],
       child: HoldUp(),
     );
@@ -61,9 +66,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     FirebaseUser _user = Provider.of<FirebaseUser>(context);
     ConnectivityStatus _status = Provider.of<ConnectivityStatus>(context);
-    return _status != ConnectivityStatus.Offline
-        ? _user != null ? MainScreen() : LoginScreen()
-        : ErrorScreen();
+    // return _status != ConnectivityStatus.Offline
+    //     ? _user != null ? MainScreen() : LoginScreen()
+    //     : ErrorScreen();
 
     // return CreateCategoryScreen();
     // return CreateCourseScreen();
@@ -72,5 +77,7 @@ class HomePage extends StatelessWidget {
     // return QuizeScreen();
     // return CourseScreen();
     // return CategoryScreen();
+    // return CreateQuestionScreen();
+    return CreateQuizeScreen();
   }
 }

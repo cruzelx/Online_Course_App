@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:online_course_app/components/popularCourseCard.dart';
-import 'package:online_course_app/screens/CategoryScreens.dart';
+import 'package:online_course_app/screens/categoryScreen/CategoryScreens.dart';
+import 'package:online_course_app/screens/mainScreen/components/popularCourseCard.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -110,7 +110,8 @@ class _MainScreenState extends State<MainScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CategoryScreen()));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => CategoryScreen()));
                             },
                             child: Container(
                               child: Row(
@@ -160,6 +161,7 @@ class _MainScreenState extends State<MainScreen> {
                         return PopularCourseCard();
                         // GestureDetector(
                         //     onTap: () {},
+                        
                         //     child: Container(
                         //       child: Row(
                         //         children: <Widget>[

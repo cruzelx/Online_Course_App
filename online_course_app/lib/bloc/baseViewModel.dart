@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:path/path.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,18 +18,16 @@ class BaseModel extends ChangeNotifier {
 
   User get currentUser => _authService.currentUser;
 
-  Future uploadFile(File image, String filename) async {
+  Future uploadFile(File image) async {
     try {
-      final StorageReference storageReference =
-          FirebaseStorage.instance.ref().child('images/$filename');
+      final StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('images/${basename(image.path)}');
       final StorageUploadTask _uploadTask = storageReference.putFile(image);
       final String imageUrl = await storageReference.getDownloadURL();
       return imageUrl;
     } catch (e) {
-      if (e is PlatformException) {
-        return e.message;
-      }
-      return e.toString();
+      return false;
     }
   }
 

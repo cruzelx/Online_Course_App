@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:online_course_app/components/quizeOptionButton.dart';
-import 'package:online_course_app/screens/QuizeResultScreen.dart';
+import 'package:online_course_app/screens/quizeScreen/QuizeResultScreen.dart';
+import 'package:online_course_app/screens/quizeScreen/components/quizeOptionButton.dart';
 
 class QuizeQuestionBody extends StatefulWidget {
   PageController pageController;

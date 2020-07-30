@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_course_app/constants/routesName.dart';
-import 'package:online_course_app/screens/CategoryScreens.dart';
-import 'package:online_course_app/screens/CourseScreen.dart';
-import 'package:online_course_app/screens/CreateCategoryScreen.dart';
-import 'package:online_course_app/screens/CreateCourseScreen.dart';
-import 'package:online_course_app/screens/MainScreen.dart';
-import 'package:online_course_app/screens/LoginScreen.dart';
-import 'package:online_course_app/screens/QuizScreen.dart';
-import 'package:online_course_app/screens/QuizeResultScreen.dart';
+import 'package:online_course_app/screens/authScreen/LoginScreen.dart';
+import 'package:online_course_app/screens/categoryScreen/CategoryScreens.dart';
+import 'package:online_course_app/screens/categoryScreen/CreateCategoryScreen.dart';
+import 'package:online_course_app/screens/courseScreen/CourseScreen.dart';
+import 'package:online_course_app/screens/courseScreen/CreateCourseScreen.dart';
+import 'package:online_course_app/screens/mainScreen/MainScreen.dart';
+import 'package:online_course_app/screens/quizeScreen/QuizeScreen.dart';
+import 'package:online_course_app/screens/quizeScreen/QuizeResultScreen.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -42,6 +42,7 @@ class Router {
             builder: (_) => Scaffold(
                 body: Center(
                     child: Text("Noroute defined for ${settings.name}"))));
-    }
-  }
-}
+            }
+          }
+        }
+        

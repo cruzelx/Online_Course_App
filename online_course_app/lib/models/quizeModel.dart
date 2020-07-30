@@ -1,6 +1,6 @@
 class Quize {
   String id;
-  List<Questions> questions;
+  List<Question> questions;
 
   Quize({this.id, this.questions});
 
@@ -8,9 +8,9 @@ class Quize {
     if (json == null) return;
     id = json['id'];
     if (json['questions'] != null) {
-      questions = new List<Questions>();
+      questions = new List<Question>();
       json['questions'].forEach((v) {
-        questions.add(new Questions.fromJson(v));
+        questions.add(new Question.fromJson(v));
       });
     }
   }
@@ -25,14 +25,14 @@ class Quize {
   }
 }
 
-class Questions {
+class Question {
   String question;
   List<String> options;
   int correctAnswer;
 
-  Questions({this.question, this.options, this.correctAnswer});
+  Question({this.question, this.options, this.correctAnswer});
 
-  Questions.fromJson(Map<String, dynamic> json) {
+  Question.fromJson(Map<String, dynamic> json) {
     question = json['question'];
     options = json['options'].cast<String>();
     correctAnswer = json['correctAnswer'];

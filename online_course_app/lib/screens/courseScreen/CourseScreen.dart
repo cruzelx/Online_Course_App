@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_app/components/drawer.dart';
 import 'package:online_course_app/components/youtubeVideoPlayer.dart';
-import 'package:online_course_app/screens/QuizScreen.dart';
-import 'package:online_course_app/screens/QuizeResultScreen.dart';
+import 'package:online_course_app/screens/quizeScreen/QuizeScreen.dart';
 
 class CourseScreen extends StatefulWidget {
   @override

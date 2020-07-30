@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:online_course_app/screens/CourseScreen.dart';
+import 'package:online_course_app/screens/courseScreen/CourseScreen.dart';
 
 class PopularCourseCard extends StatelessWidget {
   @override

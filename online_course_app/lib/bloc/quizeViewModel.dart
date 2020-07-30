@@ -1,14 +1,19 @@
 import 'package:online_course_app/bloc/baseViewModel.dart';
 import 'package:online_course_app/locator.dart';
 import 'package:online_course_app/models/quizeModel.dart';
+import 'package:online_course_app/models/validationModel.dart';
 import 'package:online_course_app/services/quizeService.dart';
 
 class QuizeViewModel extends BaseModel {
   QuizeService _quizeService = locator<QuizeService>();
 
-  List<Quize> _quizes;
+  List<Quize> _quizes = [];
 
   List<Quize> get quizes => _quizes;
+
+  List<Question> _questions = [];
+
+  List<Question> get questions => _questions;
 
   void listenToCategoriesStream() {
     _quizeService.fetchAllQuizesStream().listen((data) {
@@ -18,6 +23,13 @@ class QuizeViewModel extends BaseModel {
         notifyListeners();
       }
     });
+  }
+
+
+  void addQuestion(Question value) {
+    _questions.add(value);
+    notifyListeners();
+    print(_questions);
   }
 
   Future<void> deleteQuize(int index) async {

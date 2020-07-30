@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:online_course_app/components/categoryCourseCard.dart';
+import 'package:online_course_app/screens/categoryScreen/components/categoryCourseCard.dart';
 
 class CategoryScreen extends StatefulWidget {
   @override

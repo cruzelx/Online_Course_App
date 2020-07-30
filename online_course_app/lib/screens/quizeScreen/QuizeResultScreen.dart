@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:online_course_app/screens/CourseScreen.dart';
+import 'package:online_course_app/screens/courseScreen/CourseScreen.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class QuizeResultScreen extends StatefulWidget {

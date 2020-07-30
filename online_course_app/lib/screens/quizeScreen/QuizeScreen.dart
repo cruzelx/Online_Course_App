@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:online_course_app/components/quizeOptionButton.dart';
-import 'package:online_course_app/components/quizeQuestionBody.dart';
+import 'package:online_course_app/screens/quizeScreen/components/quizeOptionButton.dart';
+import 'package:online_course_app/screens/quizeScreen/components/quizeQuestionBody.dart';
 
 class QuizeScreen extends StatefulWidget {
   @override
