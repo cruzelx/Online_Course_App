@@ -10,15 +10,18 @@ class QuizeService {
       StreamController<List<Quize>>.broadcast();
 
   Stream fetchAllQuizesStream() {
-    _api.ref.snapshots().listen((quizesSnapshot) {
-      if (quizesSnapshot.documents.isNotEmpty) {
-        var quizes = quizesSnapshot.documents
-            .map((snapshot) =>
-                Quize.fromJson(snapshot.data, snapshot.documentID))
-            .where((quizeItem) => quizeItem.id != null)
-            .toList();
-        _quizesStreamController.add(quizes);
-      }
+    _api.ref
+        .orderBy('createdAt', descending: false)
+        .snapshots()
+        .listen((quizesSnapshot) {
+      print("debug2");
+      print(quizesSnapshot.documents.length);
+      // if (quizesSnapshot.documents.isNotEmpty) {
+      var quizes = quizesSnapshot.documents
+          .map((snapshot) => Quize.fromJson(snapshot.data, snapshot.documentID))
+          .where((quizeItem) => quizeItem.id != null)
+          .toList();
+      _quizesStreamController.add(quizes);
     });
     return _quizesStreamController.stream;
   }

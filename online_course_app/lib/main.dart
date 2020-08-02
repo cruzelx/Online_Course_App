@@ -6,12 +6,14 @@ import 'package:online_course_app/bloc/imagePickerViewModel.dart';
 import 'package:online_course_app/bloc/loginViewModel.dart';
 import 'package:online_course_app/bloc/quizeViewModel.dart';
 import 'package:online_course_app/constants/enums/connectivityStatus.dart';
+import 'package:online_course_app/constants/routesName.dart';
 import 'package:online_course_app/locator.dart';
 import 'package:online_course_app/routes/routes.dart';
 
 import 'package:online_course_app/screens/categoryScreen/CreateCategoryScreen.dart';
 import 'package:online_course_app/screens/quizeScreen/CreateQuestionScreen.dart';
 import 'package:online_course_app/screens/quizeScreen/CreateQuizeScreen.dart';
+import 'package:online_course_app/screens/quizeScreen/viewAllQuizesScreen.dart';
 import 'package:online_course_app/services/authService.dart';
 import 'package:online_course_app/services/categoryService.dart';
 import 'package:online_course_app/services/connectivityService.dart';
@@ -50,7 +52,7 @@ class HoldUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Online Course App",
-      home: HomePage(),
+      initialRoute: InitialRoute,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.light,
@@ -78,6 +80,7 @@ class HomePage extends StatelessWidget {
     // return CourseScreen();
     // return CategoryScreen();
     // return CreateQuestionScreen();
-    return CreateQuizeScreen();
+    // return CreateQuizeScreen();
+    return ViewAllQuizesScreen();
   }
 }

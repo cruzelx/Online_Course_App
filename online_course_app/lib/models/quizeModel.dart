@@ -1,12 +1,21 @@
+// import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Quize {
   String id;
+  String title;
+  String createdBy;
   List<Question> questions;
+  Timestamp createdAt;
 
-  Quize({this.id, this.questions});
+  Quize({this.id, this.questions, this.createdBy, this.title, this.createdAt});
 
-  Quize.fromJson(Map<String, dynamic> json,String id) {
+  Quize.fromJson(Map<String, dynamic> json, String documentID) {
     if (json == null) return;
-    id = json['id'];
+    id = documentID;
+    title = json['title'];
+    createdBy = json['createdBy'];
     if (json['questions'] != null) {
       questions = new List<Question>();
       json['questions'].forEach((v) {
@@ -18,6 +27,9 @@ class Quize {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['title'] = this.title;
+    data['createdAt'] = this.createdAt;
+    data['createdBy'] = this.createdBy;
     if (this.questions != null) {
       data['questions'] = this.questions.map((v) => v.toJson()).toList();
     }

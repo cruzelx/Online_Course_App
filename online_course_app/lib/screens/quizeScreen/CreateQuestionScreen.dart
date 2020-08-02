@@ -1,27 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:online_course_app/bloc/CreateQuizeQuestion.dart';
-import 'package:online_course_app/bloc/CreateQuizeValidationViewModel.dart';
 import 'package:online_course_app/bloc/quizeViewModel.dart';
-import 'package:online_course_app/components/CreationTitleWidget.dart';
 import 'package:online_course_app/models/quizeModel.dart';
 import 'package:online_course_app/screens/quizeScreen/components/radioButtonWidget.dart';
 import 'package:provider/provider.dart';
 
-class CreateQuestionScreen extends StatefulWidget {
-  @override
-  _CreateQuestionScreenState createState() => _CreateQuestionScreenState();
-}
-
-class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
+class CreateQuestionScreen extends StatelessWidget {
   GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
   TextEditingController _questionTextController = TextEditingController();
   TextEditingController _optionTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final createQuestionNotifier =
-        Provider.of<CreateQuizeQuestionViewModel>(context);
+    final createQuestionNotifier = Provider.of<QuizeViewModel>(context);
     return SafeArea(
         child: Scaffold(
             body: SingleChildScrollView(
@@ -30,18 +20,33 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
                 child: Center(
                   child: Form(
                     key: _globalFormKey,
+                    autovalidate: true,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          "Create Question",
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              "Create Question",
+                              style: TextStyle(
+                                  fontSize: 25.0, fontWeight: FontWeight.bold),
+                            ),
+                            Spacer(),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 20.0,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                })
+                          ],
                         ),
                         SizedBox(height: 30.0),
                         TextFormField(
                           controller: _questionTextController,
                           maxLines: 4,
+                          textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration(
                             hintText: "Enter Question",
                             border: InputBorder.none,
@@ -64,6 +69,7 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
                         SizedBox(height: 20.0),
                         TextFormField(
                           controller: _optionTextController,
+                          textCapitalization: TextCapitalization.sentences,
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (String value) {
                             if (value.isNotEmpty) {
@@ -109,8 +115,16 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
                                 textColor: Colors.white,
                                 color: Color(0xff121212),
                                 onPressed: () {
-                                  // _optionTextController.dispose();
-                                  // _questionTextController.dispose();
+                                  if (_globalFormKey.currentState.validate()) {
+                                    bool res =
+                                        createQuestionNotifier.createQuestion();
+                                    if (res) {
+                                      createQuestionNotifier.resetValues();
+                                      // _optionTextController.dispose();
+                                      // _questionTextController.dispose();
+                                      Navigator.pop(context);
+                                    }
+                                  }
                                 },
                                 child: Text("Finish"),
                               ),
