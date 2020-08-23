@@ -5,7 +5,9 @@ import 'package:online_course_app/models/quizeModel.dart';
 import 'package:online_course_app/models/userModel.dart';
 import 'package:online_course_app/models/validationModel.dart';
 import 'package:online_course_app/services/authService.dart';
+import 'package:online_course_app/services/dialogService.dart';
 import 'package:online_course_app/services/quizeService.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class QuizeViewModel extends BaseModel {
   QuizeViewModel() {
@@ -13,51 +15,36 @@ class QuizeViewModel extends BaseModel {
   }
   QuizeService _quizeService = locator<QuizeService>();
   AuthenticationService _authService = locator<AuthenticationService>();
+  DialogService _dialogService = locator<DialogService>();
 
   List<Quize> _quizes = [];
-
   List<Quize> get quizes => _quizes;
 
   List<Question> _questions = [];
-
   List<Question> get questions => _questions;
 
   String _title;
-
   String get title => _title;
 
-  User _createdBy;
-
-  User get createdBy => _createdBy;
+  String _createdBy;
+  String get createdBy => _createdBy;
 
   Timestamp _createdAt;
-
   Timestamp get createdAt => _createdAt;
 
-  bool _isEditing = false;
-
-  bool get isEditing => _isEditing;
+  bool _isQuizeEditing = false;
+  bool get isQuizeEditing => _isQuizeEditing;
 
   String _quizeId;
-
   String get quizeId => _quizeId;
-
-  setCreatedBy() {
-    _createdBy = _authService.currentUser;
-    notifyListeners();
-  }
 
   setQuizeTitle(String value) {
     _title = value;
     notifyListeners();
   }
 
-  resetQuize() {
-    _title = null;
-    _questions = [];
-    _createdBy = null;
-    _quizeId = null;
-    _isEditing = false;
+  setCreatedBy(String value) {
+    _createdBy = value;
     notifyListeners();
   }
 
@@ -71,50 +58,32 @@ class QuizeViewModel extends BaseModel {
     });
   }
 
-  void addQuestion(Question value) {
-    _questions.add(value);
-    notifyListeners();
-  }
-
-  Future<void> deleteQuize(int index) async {
-    await _quizeService.deleteQuize(_quizes[index].id);
-  }
-
-  Future<bool> updateQuize() async {
-    if (_title != null &&
-        _title.isNotEmpty &&
-        _questions.isNotEmpty &&
-        _questions != null &&
-        _quizeId != null &&
-        _quizeId.isNotEmpty) {
-      Quize quize = Quize(
-          title: _title,
-          questions: _questions,
-          id: _quizeId,
-          createdAt: _createdAt);
-      final res =
-          await _quizeService.updateQuize(quize, quize.id).then((value) {
-        return true;
-      });
-      return res ? true : false;
+  Future uploadQuize() async {
+    try {
+      if (_isQuizeEditing) {
+        if (editModeValidation()) {
+          Quize quize = Quize(
+              title: _title,
+              questions: _questions,
+              id: _quizeId,
+              createdAt: _createdAt);
+          final res = await _quizeService.updateQuize(quize, quize.id);
+        }
+      } else {
+        if (createModeValidation()) {
+          Quize quize = Quize(
+              title: _title, questions: _questions, createdAt: Timestamp.now());
+          var res = await _quizeService.createQuize(quize);
+          if (!(res is Quize)) return false;
+        }
+      }
+    } catch (e) {
+      return false;
     }
-    return false;
-  }
-
-  editQuize(Quize quize) {
-    _isEditing = true;
-    _title = quize.title;
-    _questions = quize.questions;
-    _quizeId = quize.id;
-    _createdAt = quize.createdAt;
-    notifyListeners();
   }
 
   Future<bool> createQuize() async {
-    if (_title != null &&
-        _title.isNotEmpty &&
-        _questions.isNotEmpty &&
-        _questions != null) {
+    if (createModeValidation()) {
       Quize quize = Quize(
           title: _title, questions: _questions, createdAt: Timestamp.now());
       var res = await _quizeService.createQuize(quize);
@@ -125,70 +94,94 @@ class QuizeViewModel extends BaseModel {
     return false;
   }
 
-  Future<Quize> fetchQuize(String id) async {
-    return await _quizeService.fetchQuize(id);
-  }
-
-  // create question
-
-  String _question;
-  List<String> _options = [];
-  int _correctIndex;
-  String _groupValue = '';
-
-  String get question => _question;
-  List<String> get options => _options;
-  int get correctIndex => _correctIndex;
-  String get groupValue => _groupValue;
-
-  setQuestion(String value) {
-    _question = value;
-    notifyListeners();
-  }
-
-  removeQuestion(int index) {
-    _questions.removeAt(index);
-    notifyListeners();
-  }
-
-  addOption(String value) {
-    _options.add(value);
-    notifyListeners();
-  }
-
-  setGroupValue(String value) {
-    _groupValue = value;
-    _correctIndex = _options.indexOf(_groupValue);
-    notifyListeners();
-  }
-
-  removeOption(String value) {
-    _options.remove(value);
-    notifyListeners();
-  }
-
-  bool createQuestion() {
-    print(_question);
-    print(_options);
-    print(_correctIndex);
-    if (_question != null &&
-        _question.isNotEmpty &&
-        _options != null &&
-        _options.isNotEmpty &&
-        _correctIndex != null &&
-        _correctIndex < _options.length) {
-      Question question = Question(
-          question: _question, options: options, correctAnswer: _correctIndex);
-      addQuestion(question);
-      return true;
+  Future<bool> updateQuize() async {
+    if (editModeValidation()) {
+      Quize quize = Quize(
+          title: _title,
+          questions: _questions,
+          id: _quizeId,
+          createdAt: _createdAt);
+      final res = await _quizeService
+          .updateQuize(quize, quize.id)
+          .then((value) => true)
+          .catchError((onError) => false);
+      return res;
     }
     return false;
   }
 
-  resetValues() {
-    _question = null;
-    _options = [];
-    _correctIndex = null;
-    _groupValue = '';
+  Future<void> deleteQuize(int index) async {
+    var res = await _dialogService.showDialog(
+        title: 'Delete "${_quizes[index].title}" ?',
+        description: "Are you sure?",
+        alertType: AlertType.warning);
+    print(res);
+    if (res) await _quizeService.deleteQuize(_quizes[index].id);
+  }
+
+  Future<Quize> fetchQuize(String id) async {
+    return await _quizeService.fetchQuize(id);
+  }
+
+  // Future<Quize> fetchQuize(String id) async {
+  //   return await _quizeService.fetchQuize(id);
+  // }
+
+  createModeValidation() {
+    if (_title != null &&
+        _title.isNotEmpty &&
+        _questions.isNotEmpty &&
+        _questions != null) return true;
+    return false;
+  }
+
+  editModeValidation() {
+    if (_title != null &&
+        _title.isNotEmpty &&
+        _questions.isNotEmpty &&
+        _questions != null &&
+        _quizeId != null &&
+        _quizeId.isNotEmpty) return true;
+    return false;
+  }
+
+  addQuestion(Question value) {
+    _questions.add(value);
+    notifyListeners();
+  }
+
+  updateQuestionAtIndex(Question question, int index) {
+    _questions.replaceRange(index, index + 1, [question]);
+    notifyListeners();
+  }
+
+  removeQuestion(int index) async {
+    var res = await _dialogService.showDialog(
+        title: 'Delete "${_questions[index].question}" ?',
+        description: 'Are you sure ?',
+        alertType: AlertType.warning);
+    if (res) {
+      _questions.removeAt(index);
+      notifyListeners();
+    }
+  }
+
+  editQuize(Quize quize) {
+    resetQuize();
+    _isQuizeEditing = true;
+    _title = quize.title;
+    _questions = quize.questions;
+    _quizeId = quize.id;
+    _createdAt = quize.createdAt;
+    notifyListeners();
+  }
+
+  resetQuize() {
+    _title = null;
+    _questions = [];
+    _createdBy = null;
+    _quizeId = null;
+    _isQuizeEditing = false;
+    notifyListeners();
   }
 }

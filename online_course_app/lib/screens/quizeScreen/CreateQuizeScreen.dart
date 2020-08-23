@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:online_course_app/bloc/questionViewModel.dart';
 import 'package:online_course_app/bloc/quizeViewModel.dart';
-import 'package:online_course_app/components/CreationTitleWidget.dart';
+import 'package:online_course_app/components/ListViewDataWidget.dart';
+import 'package:online_course_app/components/progressDialogManager.dart';
 import 'package:online_course_app/constants/routesName.dart';
 import 'package:online_course_app/models/quizeModel.dart';
 import 'package:online_course_app/screens/quizeScreen/CreateQuestionScreen.dart';
-import 'package:online_course_app/screens/quizeScreen/components/listViewWidget.dart';
 import 'package:online_course_app/screens/quizeScreen/viewAllQuizesScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,7 @@ class _CreateQuizeScreenState extends State<CreateQuizeScreen> {
   @override
   Widget build(BuildContext context) {
     final quizeNotifier = Provider.of<QuizeViewModel>(context);
+    final questionNotifier = Provider.of<QuestionViewModel>(context);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -42,32 +44,19 @@ class _CreateQuizeScreenState extends State<CreateQuizeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        quizeNotifier.isEditing ? "Edit Quize" : "Create Quize",
-                        style: TextStyle(
-                            fontSize: 25.0, fontWeight: FontWeight.bold),
-                      ),
-                      Spacer(),
-                      IconButton(
-                          icon: Icon(
-                            Icons.close,
-                            size: 20.0,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-
-                            quizeNotifier.resetQuize();
-                          })
-                    ],
+                  Text(
+                    quizeNotifier.isQuizeEditing
+                        ? "Edit Quize"
+                        : "Create Quize",
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   TextFormField(
                     // controller: _quizeTitleController,
                     textCapitalization: TextCapitalization.words,
                     initialValue:
-                        quizeNotifier.isEditing ? quizeNotifier.title : '',
+                        quizeNotifier.isQuizeEditing ? quizeNotifier.title : '',
                     decoration: InputDecoration(
                       hintText: "Enter Quize Title",
                       border: InputBorder.none,
@@ -87,10 +76,11 @@ class _CreateQuizeScreenState extends State<CreateQuizeScreen> {
                       }
                     },
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, CreateQuestionViewScreen);
+                      questionNotifier.resetQuestion();
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -116,10 +106,15 @@ class _CreateQuizeScreenState extends State<CreateQuizeScreen> {
                     shrinkWrap: true,
                     itemCount: quizeNotifier.questions.length,
                     itemBuilder: (context, index) {
-                      return ListViewQuestionWidget(
-                          question: quizeNotifier.questions[index],
+                      return ListViewDataWidget(
+                          title: quizeNotifier.questions[index].question,
                           onDelete: () => quizeNotifier.removeQuestion(index),
-                          onEdit: () => null);
+                          onEdit: () {
+                            questionNotifier.editQuestion(
+                                quizeNotifier.questions[index], index);
+                            Navigator.pushNamed(
+                                context, CreateQuestionViewScreen);
+                          });
                     },
                     separatorBuilder: (context, index) {
                       return Divider();
@@ -130,20 +125,24 @@ class _CreateQuizeScreenState extends State<CreateQuizeScreen> {
                       child: RaisedButton(
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
-                            final res = quizeNotifier.isEditing
-                                ? await quizeNotifier.updateQuize()
-                                : await quizeNotifier.createQuize();
-                            print(res);
-                            if (res) {
+                            final ProgressDialogHandler pdh =
+                                ProgressDialogHandler(
+                                    context: context,
+                                    message: quizeNotifier.isQuizeEditing
+                                        ? 'Updating Quize...'
+                                        : 'Creating Quize...');
+                            await pdh.showProgressDialog();
+                            final res = await quizeNotifier.uploadQuize();
+                            await pdh.hideProgressDialog();
+                            if (!(res is bool)) {
                               Navigator.pop(context);
-                              quizeNotifier.resetQuize();
                             }
                           }
                         },
-                        child: quizeNotifier.isEditing
+                        child: quizeNotifier.isQuizeEditing
                             ? Text("Update")
                             : Text("Create"),
-                        color: quizeNotifier.isEditing
+                        color: quizeNotifier.isQuizeEditing
                             ? Color(0xff121212)
                             : Color(0xff1000ff),
                         textColor: Colors.white,

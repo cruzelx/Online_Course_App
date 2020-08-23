@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:online_course_app/models/quizeModel.dart';
 
-class ListViewQuestionWidget extends StatelessWidget {
-  Question question;
+class ListViewDataWidget extends StatelessWidget {
+  String title;
   Function onEdit;
   Function onDelete;
-  ListViewQuestionWidget(
-      {@required this.question,
-      @required this.onEdit,
-      @required this.onDelete});
+  ListViewDataWidget({@required this.title, this.onEdit, this.onDelete});
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -36,11 +32,13 @@ class ListViewQuestionWidget extends StatelessWidget {
             )
           ],
           child: ListTile(
-            title: Text(question.question,
+            leading: Icon(Icons.star),
+            title: Text(title,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(
-                  fontSize: 14.0,
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.bold,
                 )),
           )),
     );

@@ -2,37 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class YoutubeVideoPlayer extends StatefulWidget {
+  String youtubeUrl;
+  YoutubeVideoPlayer({Key key, this.youtubeUrl}) : super(key: key);
   @override
   _YoutubeVideoPlayerState createState() => _YoutubeVideoPlayerState();
 }
 
 class _YoutubeVideoPlayerState extends State<YoutubeVideoPlayer> {
-  YoutubePlayerController _controller = YoutubePlayerController(
-      initialVideoId: 'zRO4u6cYTEQ',
-      flags: YoutubePlayerFlags(
-          autoPlay: true, forceHD: false, enableCaption: true));
+  YoutubePlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    // _controller = YoutubePlayerController(
-    //     initialVideoId: 'zRO4u6cYTEQ',
-    //     flags: YoutubePlayerFlags(
-    //         autoPlay: true, forceHD: false, enableCaption: true));
+    _controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(widget.youtubeUrl),
+        flags: YoutubePlayerFlags(autoPlay: false));
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_controller.value.isReady);
-    return YoutubePlayer(
-      controller: _controller,
-      topActions: <Widget>[Text("hello there")],
-    );
+    return YoutubePlayer(controller: _controller);
   }
 }

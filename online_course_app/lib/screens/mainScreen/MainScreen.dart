@@ -1,6 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:online_course_app/bloc/categoryViewModel.dart';
+import 'package:online_course_app/bloc/courseViewModel.dart';
+import 'package:online_course_app/bloc/loginViewModel.dart';
+import 'package:online_course_app/bloc/studyScreenStateViewModel.dart';
+import 'package:online_course_app/bloc/userViewModel.dart';
 import 'package:online_course_app/screens/categoryScreen/CategoryScreens.dart';
+import 'package:online_course_app/screens/mainScreen/components/categoryCardWidget.dart';
 import 'package:online_course_app/screens/mainScreen/components/popularCourseCard.dart';
+import 'package:online_course_app/screens/profileScreen/profileScreen.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -41,219 +50,129 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        drawer: Drawer(),
-        appBar: AppBar(
-          leading: IconButton(onPressed: () {}, icon: Icon(Icons.sort)),
-          iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white,
-          elevation: _elevation,
-          centerTitle: true,
-          title: Text("HOME",
-              style: TextStyle(
-                  color: Colors.black87, fontWeight: FontWeight.bold)),
-          actions: <Widget>[
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-              child: Container(
-                width: 40.0,
-                child: CircleAvatar(
-                  radius: 30.0,
-                  backgroundImage: NetworkImage(
-                      "https://pbs.twimg.com/profile_images/1222654825403424768/-ySQePLc.jpg"),
-                ),
-              ),
-            )
-          ],
-        ),
-        body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          controller: _scrollController,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 25.0),
-                Container(
-                  height: 45.0,
-                  child: TextField(
-                      onTap: () {},
-                      style: TextStyle(fontSize: 16.0),
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 8.0),
-                          prefixIcon: Icon(Icons.search),
-                          suffixIcon: IconButton(
-                              icon: Icon(Icons.mic), onPressed: () {}),
-                          hintMaxLines: 1,
-                          isDense: true,
-                          filled: true,
-                          fillColor: Color(0xfff2f2f2),
-                          hintText: "Search Courses",
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              borderSide: BorderSide.none))),
-                ),
-                SizedBox(height: 25.0),
-                Text("Categories",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(height: 10.0),
-                Container(
-                  height: 130.0,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      // physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => CategoryScreen()));
-                            },
-                            child: Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Card(
-                                    elevation: 2.0,
-                                    child: Container(
-                                        width: 100.0,
-                                        height: 120.0,
-                                        child: Center(
-                                            child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  "https://i.pinimg.com/originals/4c/e0/97/4ce097ee23e86b210bc036a55111c6ae.png"),
-                                              radius: 30.0,
-                                            ),
-                                            SizedBox(height: 15.0),
-                                            Text("Category $index")
-                                          ],
-                                        ))),
-                                  ),
-                                  SizedBox(width: 10.0)
-                                ],
-                              ),
-                            ));
-                      }),
-                ),
-                SizedBox(height: 20.0),
-                Text("Popular Courses",
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10.0),
-                Container(
-                  height: 280.0,
-                  child: ListView.separated(
-                      itemCount: 10,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      // physics: NeverScrollableScrollPhysics(),
-                      separatorBuilder: (context, index) {
-                        return SizedBox(width: 20.0);
-                      },
-                      itemBuilder: (context, index) {
-                        return PopularCourseCard();
-                        // GestureDetector(
-                        //     onTap: () {},
-                        
-                        //     child: Container(
-                        //       child: Row(
-                        //         children: <Widget>[
-                        //           Card(
-                        //             shape: RoundedRectangleBorder(
-                        //                 borderRadius:
-                        //                     BorderRadius.circular(20.0)),
-                        //             child: Container(
-                        //                 width: 200,
-                        //                 height: 260.0,
-                        //                 decoration: BoxDecoration(
-                        //                     borderRadius:
-                        //                         BorderRadius.circular(20.0)),
-                        //                 child: Column(
-                        //                   children: <Widget>[
-                        //                     Container(
-                        //                       height: 125,
-                        //                       width: double.infinity,
-                        //                       child: ClipRRect(
-                        //                           borderRadius:
-                        //                               BorderRadius.only(
-                        //                                   topLeft:
-                        //                                       Radius.circular(
-                        //                                           20.0),
-                        //                                   topRight:
-                        //                                       Radius.circular(
-                        //                                           20.0)),
-                        //                           child: Image.network(
-                        //                               "https://static.sustainability.asu.edu/giosMS-uploads/sites/15/2019/05/teaching-resources-1024x575.jpg",
-                        //                               fit: BoxFit.cover)),
-                        //                       decoration: BoxDecoration(
-                        //                           color: Colors.blue,
-                        //                           borderRadius:
-                        //                               BorderRadius.circular(
-                        //                                   20.0)),
-                        //                     ),
-                        //                     Padding(
-                        //                       padding: EdgeInsets.all(8.0),
-                        //                       child: Column(
-                        //                         crossAxisAlignment:
-                        //                             CrossAxisAlignment.start,
-                        //                         mainAxisAlignment:
-                        //                             MainAxisAlignment
-                        //                                 .spaceBetween,
-                        //                         children: <Widget>[
-                        //                           Text(
-                        //                             "Begineer: Introduction To Neural Network",
-                        //                             style: TextStyle(
-                        //                                 fontWeight:
-                        //                                     FontWeight.bold),
-                        //                             overflow:
-                        //                                 TextOverflow.ellipsis,
-                        //                             maxLines: 2,
-                        //                           ),
-                        //                           // SizedBox(height: 5.0),
-                        //                           Row(
-                        //                             children: <Widget>[
-                        //                               Icon(Icons.blur_on),
-                        //                               SizedBox(width: 8.0),
-                        //                               Text("12 videos"),
-                        //                             ],
-                        //                           ),
+    final loginNotifier = Provider.of<LoginViewModel>(context);
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          drawer: Drawer(),
+          appBar: AppBar(
+            leading: IconButton(onPressed: () {}, icon: Icon(Icons.sort)),
+            iconTheme: IconThemeData(color: Colors.black),
+            backgroundColor: Colors.white,
+            elevation: _elevation,
+            centerTitle: true,
+            title: Text("HOME",
+                style: TextStyle(
+                    color: Colors.black87, fontWeight: FontWeight.bold)),
+            actions: <Widget>[
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+                child: InkWell(
+                  onTap: () {
+                    print(loginNotifier.currentUser.username);
+                    // loginNotifier.logout();
 
-                        //                           Divider(),
-                        //                           Row(
-                        //                             children: <Widget>[
-                        //                               Icon(Icons
-                        //                                   .play_circle_outline),
-                        //                               SizedBox(width: 8.0),
-                        //                               Text(
-                        //                                 "Start The Course",
-                        //                                 style: TextStyle(
-                        //                                     fontWeight:
-                        //                                         FontWeight
-                        //                                             .bold),
-                        //                               )
-                        //                             ],
-                        //                           )
-                        //                         ],
-                        //                       ),
-                        //                     ),
-                        //                   ],
-                        //                 )),
-                        //           ),
-                        //           SizedBox(width: 15.0)
-                        //         ],
-                        //       ),
-                        //     ));
-                      }),
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider.value(
+                              value: loginNotifier,
+                              child: ProfileScreen(
+                                user: loginNotifier.currentUser,
+                              ),
+                            )));
+                    // await loginNotifier.logout();
+                  },
+                  child: Hero(
+                    tag: 'userImage',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100.0),
+                      child: CachedNetworkImage(
+                          imageUrl: loginNotifier.currentUser.dp),
+                    ),
+                  ),
                 ),
-                SizedBox(height: 20.0)
-              ],
+              )
+            ],
+          ),
+          body: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            controller: _scrollController,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 25.0),
+                  Container(
+                    height: 45.0,
+                    child: TextField(
+                        onTap: () {},
+                        style: TextStyle(fontSize: 16.0),
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 8.0),
+                            prefixIcon: Icon(Icons.search),
+                            suffixIcon: IconButton(
+                                icon: Icon(Icons.mic), onPressed: () {}),
+                            hintMaxLines: 1,
+                            isDense: true,
+                            filled: true,
+                            fillColor: Color(0xfff2f2f2),
+                            hintText: "Search Courses",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(40.0),
+                                borderSide: BorderSide.none))),
+                  ),
+                  SizedBox(height: 25.0),
+                  Text("Categories",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10.0),
+                  SizedBox(
+                    height: 130.0,
+                    child: Consumer<CategoryViewModel>(
+                      builder: (contex, categoryNotifier, child) {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            // physics: NeverScrollableScrollPhysics(),
+                            itemCount: categoryNotifier.categories.length,
+                            itemBuilder: (context, index) {
+                              return CategoryCardWidget(
+                                  category: categoryNotifier.categories[index]);
+                            });
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  Text("Recent Courses",
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10.0),
+                  SizedBox(
+                    height: 290.0,
+                    child: Consumer<CourseViewModel>(
+                      builder: (context, courseNotifier, child) {
+                        return ListView.separated(
+                            itemCount: courseNotifier.courses.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            // physics: NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, index) {
+                              return SizedBox(width: 8.0);
+                            },
+                            itemBuilder: (context, index) {
+                              return PopularCourseCard(
+                                course: courseNotifier.courses[index],
+                              );
+                            });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

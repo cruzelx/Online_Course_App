@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_app/bloc/questionViewModel.dart';
 import 'package:online_course_app/bloc/quizeViewModel.dart';
 import 'package:online_course_app/models/quizeModel.dart';
 import 'package:online_course_app/screens/quizeScreen/components/radioButtonWidget.dart';
 import 'package:provider/provider.dart';
 
-class CreateQuestionScreen extends StatelessWidget {
+class CreateQuestionScreen extends StatefulWidget {
+  @override
+  _CreateQuestionScreenState createState() => _CreateQuestionScreenState();
+}
+
+class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
   GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
-  TextEditingController _questionTextController = TextEditingController();
-  TextEditingController _optionTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final createQuestionNotifier = Provider.of<QuizeViewModel>(context);
+    final questionNotifier = Provider.of<QuestionViewModel>(context);
+    final quizeNotifier = Provider.of<QuizeViewModel>(context);
     return SafeArea(
         child: Scaffold(
             body: SingleChildScrollView(
@@ -20,31 +25,19 @@ class CreateQuestionScreen extends StatelessWidget {
                 child: Center(
                   child: Form(
                     key: _globalFormKey,
-                    autovalidate: true,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              "Create Question",
-                              style: TextStyle(
-                                  fontSize: 25.0, fontWeight: FontWeight.bold),
-                            ),
-                            Spacer(),
-                            IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  size: 20.0,
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                })
-                          ],
+                        Text(
+                          questionNotifier.isQuestionEditing
+                              ? "Edit Question"
+                              : "Create Question",
+                          style: TextStyle(
+                              fontSize: 25.0, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 30.0),
                         TextFormField(
-                          controller: _questionTextController,
+                          initialValue: questionNotifier.question,
                           maxLines: 4,
                           textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration(
@@ -54,7 +47,7 @@ class CreateQuestionScreen extends StatelessWidget {
                             fillColor: Color(0xfff0f0f0),
                           ),
                           onChanged: (String value) {
-                            createQuestionNotifier.setQuestion(value);
+                            questionNotifier.setQuestion(value);
                           },
                           validator: (String value) {
                             if (value.isEmpty) {
@@ -68,12 +61,12 @@ class CreateQuestionScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 20.0),
                         TextFormField(
-                          controller: _optionTextController,
+                          initialValue: questionNotifier.question,
                           textCapitalization: TextCapitalization.sentences,
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (String value) {
                             if (value.isNotEmpty) {
-                              createQuestionNotifier.addOption(value);
+                              questionNotifier.addOption(value);
                             }
 
                             // setState(() {
@@ -95,60 +88,35 @@ class CreateQuestionScreen extends StatelessWidget {
                           },
                         ),
                         SizedBox(height: 30.0),
-                        for (String option in createQuestionNotifier.options)
+                        for (String option in questionNotifier.options)
                           GestureDetector(
                               onLongPress: () {
-                                createQuestionNotifier.removeOption(option);
+                                questionNotifier.removeOption(option);
                               },
-                              child: buttons(
-                                  createQuestionNotifier.groupValue,
-                                  option,
-                                  createQuestionNotifier.setGroupValue)),
+                              child: buttons(questionNotifier.groupValue,
+                                  option, questionNotifier.setGroupValue)),
                         SizedBox(height: 30.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: RaisedButton(
-                                textColor: Colors.white,
-                                color: Color(0xff121212),
-                                onPressed: () {
-                                  if (_globalFormKey.currentState.validate()) {
-                                    bool res =
-                                        createQuestionNotifier.createQuestion();
-                                    if (res) {
-                                      createQuestionNotifier.resetValues();
-                                      // _optionTextController.dispose();
-                                      // _questionTextController.dispose();
-                                      Navigator.pop(context);
-                                    }
-                                  }
-                                },
-                                child: Text("Finish"),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: RaisedButton(
-                                  textColor: Colors.white,
-                                  color: Color(0xff1000ff),
-                                  onPressed: () {
-                                    if (_globalFormKey.currentState
-                                        .validate()) {
-                                      bool res = createQuestionNotifier
-                                          .createQuestion();
-                                      if (res) {
-                                        createQuestionNotifier.resetValues();
-                                        _optionTextController.clear();
-                                        _questionTextController.clear();
-                                      }
-                                    }
-                                  },
-                                  child: Text("Add More")),
-                            )
-                          ],
+                        Container(
+                          width: double.infinity,
+                          child: RaisedButton(
+                            textColor: Colors.white,
+                            color: Color(0xff121212),
+                            onPressed: () {
+                              if (_globalFormKey.currentState.validate()) {
+                                final res =
+                                    questionNotifier.createQuizeQuestion();
+                                if (!(res is bool)) {
+                                  questionNotifier.isQuestionEditing
+                                      ? quizeNotifier.updateQuestionAtIndex(res,
+                                          questionNotifier.currentQuestionIndex)
+                                      : quizeNotifier.addQuestion(res);
+                                  Navigator.pop(context);
+                                  questionNotifier.resetQuestion();
+                                }
+                              }
+                            },
+                            child: Text("Finish"),
+                          ),
                         )
                       ],
                     ),

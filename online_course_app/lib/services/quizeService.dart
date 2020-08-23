@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_course_app/services/firebaseBaseAPIService.dart';
 import 'package:online_course_app/models/quizeModel.dart';
 
@@ -26,12 +27,22 @@ class QuizeService {
     return _quizesStreamController.stream;
   }
 
+  Future<List<Quize>> fetchBatchQuizes(List<String> ids) async {
+    if (ids == null || ids.isEmpty) return null;
+    final res =
+        await _api.ref.where(FieldPath.documentId, whereIn: ids).getDocuments();
+    return res.documents
+        .map((e) => Quize.fromJson(e.data, e.documentID))
+        .toList();
+  }
+
   Future<void> deleteQuize(String id) async {
     await _api.removeDocumentById(id);
   }
 
   Future<Quize> fetchQuize(String id) async {
     var quize = await _api.getDocumentById(id);
+    if (quize == null) return null;
     return Quize.fromJson(quize.data, quize.documentID);
   }
 

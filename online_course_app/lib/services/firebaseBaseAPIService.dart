@@ -29,4 +29,8 @@ class FirebaseBaseAPIService {
   // Update particular document by id
   Future<void> updateDocument(Map data, String id) async =>
       await ref.document(id).updateData(data);
+
+  // Add document to the collection
+  Future<void> addDocumentWithCustomId(Map data,String id) async =>
+      await ref.document(id).setData(data);
 }

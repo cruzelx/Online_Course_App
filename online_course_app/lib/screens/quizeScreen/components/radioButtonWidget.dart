@@ -8,9 +8,7 @@ Widget buttons(String groupValue, String value, Function setGroupValue) {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                  color: Color(0xfff0f0f0),
-                  blurRadius: 10.0,
-                  spreadRadius: 3.0)
+                  color: Color(0xfff0f0f0), blurRadius: 10.0, spreadRadius: 3.0)
             ],
             border: value == groupValue
                 ? Border.all(color: Color(0xff1000ff), width: 1.5)

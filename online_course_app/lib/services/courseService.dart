@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_course_app/models/courseModel.dart';
 import 'package:online_course_app/services/firebaseBaseAPIService.dart';
 
@@ -11,14 +13,12 @@ class CourseService {
 
   Stream fetchAllCourseStream() {
     _api.ref.snapshots().listen((coursesSnapshot) {
-      if (coursesSnapshot.documents.isNotEmpty) {
-        var courses = coursesSnapshot.documents
-            .map((snapshot) =>
-                Course.fromJson(snapshot.data, snapshot.documentID))
-            .where((courseItem) => courseItem.title != null)
-            .toList();
-        _coursesStreamController.add(courses);
-      }
+      var courses = coursesSnapshot.documents
+          .map(
+              (snapshot) => Course.fromJson(snapshot.data, snapshot.documentID))
+          .where((courseItem) => courseItem.title != null)
+          .toList();
+      _coursesStreamController.add(courses);
     });
 
     return _coursesStreamController.stream;
@@ -42,4 +42,16 @@ class CourseService {
     var newCourse = await newCourseRef.get();
     return Course.fromJson(newCourse.data, newCourse.documentID);
   }
+
+  Future<List<Course>> fetchBatchCourses(List<String> ids) async {
+    if (ids == null || ids.isEmpty) return null;
+    final res =
+        await _api.ref.where(FieldPath.documentId, whereIn: ids).getDocuments();
+
+    return res.documents
+        .map((e) => Course.fromJson(e.data, e.documentID))
+        .toList();
+  }
+
+  
 }

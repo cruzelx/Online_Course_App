@@ -44,6 +44,12 @@ dependencies:
   flushbar: ^1.10.4
   flutter_spinkit: ^4.1.2+1
   flutter_slidable: ^0.5.5
+  progress_dialog: ^1.2.4
+  rflutter_alert: ^1.0.3
+  intl: ^0.16.1
+  transparent_image: ^1.0.0
+  cached_network_image: ^2.2.0+1
+  data_connection_checker: ^0.3.4
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +74,7 @@ flutter:
     - assets/images/create.svg
     - assets/images/createCourse.svg
     - assets/images/error.svg
+    - assets/images/imagePlaceholder.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

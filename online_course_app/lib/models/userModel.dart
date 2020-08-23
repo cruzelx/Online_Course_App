@@ -1,15 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   String id;
   String username;
   String email;
   String dp;
   bool isAdmin;
+  String token;
   List<String> completedCourses;
   List<String> ongoingCourses;
   List<String> createdCourses;
   List<String> createdCategories;
   List<String> createdQuizes;
-  List<Scores> scores;
+  List<Score> scores;
+  Timestamp createdAt;
 
   User(
       {this.id,
@@ -17,31 +21,45 @@ class User {
       this.email,
       this.dp,
       this.isAdmin,
+      this.token,
       this.completedCourses,
       this.ongoingCourses,
       this.createdCourses,
       this.createdCategories,
       this.createdQuizes,
-      this.scores});
+      this.scores,
+      this.createdAt});
 
-  User.fromJson(Map<String, dynamic> json, String id) {
+  User.fromJson(Map<String, dynamic> json, String docId) {
     if (json == null) return;
-    id = json['id'];
+    id = docId;
+    token = json['token'];
     username = json['username'];
     email = json['email'];
     dp = json['dp'];
     isAdmin = json['isAdmin'];
-    completedCourses = json['completedCourses'].cast<String>();
-    ongoingCourses = json['ongoingCourses'].cast<String>();
-    createdCourses = json['createdCourses'].cast<String>();
-    createdCategories = json['createdCategories'].cast<String>();
-    createdQuizes = json['createdQuizes'].cast<String>();
+    completedCourses = json['completedCourses'] != null
+        ? json['completedCourses'].cast<String>()
+        : [];
+    ongoingCourses = json['ongoingCourses'] != null
+        ? json['ongoingCourses'].cast<String>()
+        : [];
+    createdCourses = json['createdCourses'] != null
+        ? json['createdCourses'].cast<String>()
+        : [];
+    createdCategories = json['createdCategories'] != null
+        ? json['createdCategories'].cast<String>()
+        : [];
+    createdQuizes = json['createdQuizes'] != null
+        ? json['createdQuizes'].cast<String>()
+        : [];
     if (json['scores'] != null) {
-      scores = new List<Scores>();
+      scores = new List<Score>();
       json['scores'].forEach((v) {
-        scores.add(new Scores.fromJson(v));
+        scores.add(new Score.fromJson(v));
       });
     }
+    createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,32 +69,38 @@ class User {
     data['email'] = this.email;
     data['dp'] = this.dp;
     data['isAdmin'] = this.isAdmin;
-    data['completedCourses'] = this.completedCourses;
-    data['ongoingCourses'] = this.ongoingCourses;
-    data['createdCourses'] = this.createdCourses;
-    data['createdCategories'] = this.createdCategories;
-    data['createdQuizes'] = this.createdQuizes;
+    data['token'] = this.token;
+    data['completedCourses'] = this.completedCourses ?? [];
+    data['ongoingCourses'] = this.ongoingCourses ?? [];
+    data['createdCourses'] = this.createdCourses ?? [];
+    data['createdCategories'] = this.createdCategories ?? [];
+    data['createdQuizes'] = this.createdQuizes ?? [];
     if (this.scores != null) {
       data['scores'] = this.scores.map((v) => v.toJson()).toList();
     }
+    data['createdAt'] = this.createdAt;
     return data;
   }
 }
 
-class Scores {
-  Course course;
+class Score {
+  List<Course> courses;
 
-  Scores({this.course});
+  Score({this.courses});
 
-  Scores.fromJson(Map<String, dynamic> json) {
-    course =
-        json['course'] != null ? new Course.fromJson(json['course']) : null;
+  Score.fromJson(Map<String, dynamic> json) {
+    if (json['courses'] != null) {
+      courses = new List<Course>();
+      json['courses'].forEach((v) {
+        courses.add(new Course.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.course != null) {
-      data['course'] = this.course.toJson();
+    if (this.courses != null) {
+      data['courses'] = this.courses.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -84,16 +108,18 @@ class Scores {
 
 class Course {
   String id;
-  List<Topics> topics;
+  String title;
+  List<Topic> topics;
 
-  Course({this.id, this.topics});
+  Course({this.id, this.title, this.topics});
 
   Course.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    title = json['title'];
     if (json['topics'] != null) {
-      topics = new List<Topics>();
+      topics = new List<Topic>();
       json['topics'].forEach((v) {
-        topics.add(new Topics.fromJson(v));
+        topics.add(new Topic.fromJson(v));
       });
     }
   }
@@ -101,6 +127,7 @@ class Course {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['title'] = this.title;
     if (this.topics != null) {
       data['topics'] = this.topics.map((v) => v.toJson()).toList();
     }
@@ -108,20 +135,20 @@ class Course {
   }
 }
 
-class Topics {
-  String id;
+class Topic {
+  String title;
   double score;
 
-  Topics({this.id, this.score});
+  Topic({this.title, this.score});
 
-  Topics.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+  Topic.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
     score = json['score'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    data['title'] = this.title;
     data['score'] = this.score;
     return data;
   }

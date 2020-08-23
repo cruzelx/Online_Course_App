@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_app/bloc/quizeViewModel.dart';
+import 'package:online_course_app/components/editCardWidget.dart';
 import 'package:online_course_app/constants/routesName.dart';
+import 'package:online_course_app/models/quizeModel.dart';
 import 'package:online_course_app/screens/quizeScreen/components/quizeCardWidget.dart';
 import 'package:provider/provider.dart';
 
@@ -19,27 +21,16 @@ class ViewAllQuizesScreen extends StatelessWidget {
           slivers: <Widget>[
             SliverList(
                 delegate: SliverChildListDelegate([
-              SizedBox(height: 10.0),
-              Row(
-                children: <Widget>[
-                  Text(
-                    "All Quizes",
-                    style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-                  ),
-                  Spacer(),
-                  IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        size: 20.0,
-                      ),
-                      onPressed: () {})
-                ],
+              SizedBox(height: 20.0),
+              Text(
+                "All Quizes",
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 15.0),
               InkWell(
                 onTap: () {
                   Navigator.pushNamed(context, CreateQuizeViewScreen);
+                  quizenotifier.resetQuize();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -65,8 +56,11 @@ class ViewAllQuizesScreen extends StatelessWidget {
                   crossAxisCount: 2,
                 ),
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  return QuizeCardWidget(
-                    quize: quizenotifier.quizes[index],
+                  Quize quize = quizenotifier.quizes[index];
+                  int questionsLength = quize.questions.length;
+                  return EditCardWidget(
+                    title: quize.title,
+                    items:questionsLength == 1 ?'$questionsLength question':'$questionsLength questions',
                     onDelete: () async =>
                         await quizenotifier.deleteQuize(index),
                     onEdit: () {

@@ -3,7 +3,7 @@ import 'package:online_course_app/services/firebaseBaseAPIService.dart';
 import 'dart:async';
 
 class UserService {
-  FirebaseBaseAPIService _api = FirebaseBaseAPIService("users");
+  FirebaseBaseAPIService _api = FirebaseBaseAPIService("clients");
 
   final StreamController<List<User>> _usersStreamController =
       StreamController<List<User>>.broadcast();
@@ -28,6 +28,7 @@ class UserService {
 
   Future<User> fetchUser(String id) async {
     var user = await _api.getDocumentById(id);
+    if (!user.exists) return null;
     return User.fromJson(user.data, user.documentID);
   }
 
@@ -40,4 +41,10 @@ class UserService {
     var newUser = await newUserRef.get();
     return User.fromJson(newUser.data, newUser.documentID);
   }
+
+  Future<void> createUserWithCustomId(User user) async {
+    await _api.addDocumentWithCustomId(user.toJson(), user.id);
+  }
+
+
 }

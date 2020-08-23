@@ -1,9 +1,16 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:online_course_app/bloc/categoryViewModel.dart';
+import 'package:online_course_app/models/categoryModel.dart';
 import 'package:online_course_app/screens/categoryScreen/components/categoryCourseCard.dart';
+import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatefulWidget {
+  Category category;
+  CategoryScreen({Key key, this.category}) : super(key: key);
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
@@ -11,6 +18,8 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
+    final categoryNotifier = Provider.of<CategoryViewModel>(context);
+
     return SafeArea(
         child: Scaffold(
             body: NestedScrollView(
@@ -25,7 +34,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       ),
                       floating: true,
                       snap: true,
-                      title: Text("Category Title"),
+                      title: Text(widget.category.title),
                       expandedHeight: MediaQuery.of(context).size.height * 0.40,
                       flexibleSpace: FlexibleSpaceBar(
                         background: Stack(
@@ -33,11 +42,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             Container(
                               height: double.infinity,
                               width: double.infinity,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          "https://www.unitednow.com/media/homepage/art.jpg"),
-                                      fit: BoxFit.cover)),
+                              child: CachedNetworkImage(
+                                  imageUrl: widget.category.coverImage,
+                                  fit: BoxFit.cover),
                             ),
                             Container(
                               decoration: BoxDecoration(
@@ -57,7 +64,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   padding: EdgeInsets.all(8.0),
                                   child: Center(
                                     child: Text(
-                                      "Some info about the course.",
+                                      widget.category.description,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -77,75 +84,36 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 },
                 body: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: ListView.builder(itemBuilder: (context, index) {
-                    return CategoryCourseCard();
-                  }),
-                )
-                // body: GridView.builder(
-                //   physics: BouncingScrollPhysics(),
-                //   gridDelegate:
-                //       SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                //   itemBuilder: (BuildContext context, int index) {
-                //     return new Card(
-                //         margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                //         shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(15.0),
-                //         ),
-                //         child: Stack(
-                //           children: <Widget>[
-                //             Container(
-                //                 height: double.infinity,
-                //                 child: ClipRRect(
-                //                     borderRadius: BorderRadius.circular(15.0),
-                //                     child: Image.network(
-                //                       "https://leverageedu.com/blog/wp-content/uploads/2019/10/BBA-MBA-Integrated-Course.png",
-                //                       fit: BoxFit.cover,
-                //                     ))),
-                //             Container(
-                //               decoration: BoxDecoration(
-                //                   borderRadius: BorderRadius.circular(15.0),
-                //                   gradient: LinearGradient(
-                //                       begin: Alignment.topCenter,
-                //                       end: Alignment.bottomCenter,
-                //                       colors: [
-                //                         Colors.black.withOpacity(0),
-                //                         Colors.black.withOpacity(0.7)
-                //                       ])),
-                //             ),
-                //             Padding(
-                //                 padding: EdgeInsets.all(8.0),
-                //                 child: Column(
-                //                   children: <Widget>[
-                //                     Expanded(
-                //                       child: Center(
-                //                         child: Text("Course Title $index",
-                //                             style: TextStyle(fontSize: 18.0,
-                //                                 color: Colors.white,
-                //                                 fontWeight: FontWeight.bold)),
-                //                       ),
-                //                     ),
-                //                     Divider(
-                //                       color: Colors.white,
-                //                     ),
-                //                     Row(
-                //                       children: <Widget>[
-                //                         Icon(
-                //                           Icons.play_circle_outline,
-                //                           color: Colors.white,
-                //                         ),
-                //                         SizedBox(width: 8.0),
-                //                         Text("Start The Course",
-                //                             style: TextStyle(
-                //                                 color: Colors.white,
-                //                                 fontWeight: FontWeight.bold))
-                //                       ],
-                //                     )
-                //                   ],
-                //                 ))
-                //           ],
-                //         ));
-                //   },
-                // ),
-                )));
+                  child: FutureBuilder(
+                    future:
+                        categoryNotifier.getCategoryCourses(widget.category.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                            child: SpinKitChasingDots(
+                          size: 50.0,
+                          color: Colors.deepPurpleAccent,
+                        ));
+                      } else if (snapshot.hasData && snapshot.data != null)
+                      return ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) {
+                              return CategoryCourseCard(
+                                course: snapshot.data[index],
+                              );
+                            });
+
+                      
+                     else 
+                     return Center(
+                          child: Text("No Data"));
+
+                      
+                        
+                    },
+                  ),
+                ))));
   }
 }

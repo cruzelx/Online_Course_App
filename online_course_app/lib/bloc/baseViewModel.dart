@@ -16,8 +16,6 @@ class BaseModel extends ChangeNotifier {
   bool get messageVisibility => _messageVisibility;
   // bool get isUserLoggedIn => _isUserLoggedIn;
 
-  User get currentUser => _authService.currentUser;
-
   Future uploadFile(File image) async {
     try {
       final StorageReference storageReference = FirebaseStorage.instance

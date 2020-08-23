@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Course {
   String id;
   String title;
   String description;
   String coverImage;
-  List<Chapters> chapters;
+  List<Chapter> chapters;
   String category;
   String createdBy;
+  Timestamp createdAt;
 
   Course(
       {this.id,
@@ -14,27 +17,29 @@ class Course {
       this.coverImage,
       this.chapters,
       this.category,
-      this.createdBy});
+      this.createdBy,
+      this.createdAt});
 
-  Course.fromJson(Map<String, dynamic> json, String id) {
+  Course.fromJson(Map<String, dynamic> json, String docId) {
     if (json == null) return;
-    id = json['id'];
+    id = docId;
     title = json['title'];
     description = json['description'];
     coverImage = json['coverImage'];
     if (json['chapters'] != null) {
-      chapters = new List<Chapters>();
+      chapters = new List<Chapter>();
       json['chapters'].forEach((v) {
-        chapters.add(new Chapters.fromJson(v));
+        chapters.add(new Chapter.fromJson(v));
       });
     }
     category = json['category'];
     createdBy = json['createdBy'];
+    createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = id;
+    data['id'] = this.id;
     data['title'] = this.title;
     data['description'] = this.description;
     data['coverImage'] = this.coverImage;
@@ -43,22 +48,23 @@ class Course {
     }
     data['category'] = this.category;
     data['createdBy'] = this.createdBy;
+    data['createdAt'] = this.createdAt;
     return data;
   }
 }
 
-class Chapters {
+class Chapter {
   String title;
-  List<Topics> topics;
+  List<Topic> topics;
 
-  Chapters({this.title, this.topics});
+  Chapter({this.title, this.topics});
 
-  Chapters.fromJson(Map<String, dynamic> json) {
+  Chapter.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     if (json['topics'] != null) {
-      topics = new List<Topics>();
+      topics = new List<Topic>();
       json['topics'].forEach((v) {
-        topics.add(new Topics.fromJson(v));
+        topics.add(new Topic.fromJson(v));
       });
     }
   }
@@ -73,19 +79,19 @@ class Chapters {
   }
 }
 
-class Topics {
+class Topic {
   String title;
   String description;
   String videoUrl;
-  String quizes;
+  String quize;
 
-  Topics({this.title, this.description, this.videoUrl, this.quizes});
+  Topic({this.title, this.description, this.videoUrl, this.quize});
 
-  Topics.fromJson(Map<String, dynamic> json) {
+  Topic.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     description = json['description'];
     videoUrl = json['videoUrl'];
-    quizes = json['quizes'];
+    quize = json['quize'];
   }
 
   Map<String, dynamic> toJson() {
@@ -93,7 +99,7 @@ class Topics {
     data['title'] = this.title;
     data['description'] = this.description;
     data['videoUrl'] = this.videoUrl;
-    data['quizes'] = this.quizes;
+    data['quize'] = this.quize;
     return data;
   }
 }
